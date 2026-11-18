@@ -504,12 +504,12 @@ touches it. Clients still show it as ended, because liveness is derived
 
 ---
 
-## 27. Realtime is SignalR pushing fresh state; every write goes over REST
+## 27. Realtime is Socket.IO pushing fresh state; every write goes over REST
 
-**Decision.** One hub (`/hubs/realtime`) accepts only `Subscribe` and
-`Unsubscribe`. Changes go through the REST API, which commits them, raises domain
+**Decision.** One Socket.IO endpoint (`/realtime`) accepts only `subscribe` and
+`unsubscribe`. Changes go through the REST API, which commits them, raises domain
 events, and enqueues a signal. A background broadcaster reads the current state
-once and pushes it to the topic's group: `room`, `members`, `message`, `history`.
+once and pushes it to the topic's room: `room`, `members`, `message`, `history`.
 On the client, `liveQuery()` in `src/backend/realtime.ts` subscribes first, then
 loads over REST, then folds pushes in. After every reconnect it reloads from
 scratch.
@@ -519,8 +519,8 @@ one place. Pushing full state rather than "something changed" means one database
 read per change instead of one per subscriber. Reloading on reconnect is entry
 21's lesson carried over: a push missed while disconnected is never relied on.
 
-**Cost.** Groups live in one process's memory, so a second API instance needs a
-backplane. Delivery is best effort: the queue drops its oldest signals if
+**Cost.** Rooms live in one process's memory, so a second API instance needs a
+Socket.IO adapter (e.g. Redis). Delivery is best effort: the queue drops its oldest signals if
 10,000 pile up.
 
 ---
@@ -549,8 +549,8 @@ The Npgsql provider retries transient failures.
 **Decision.** `POST /auth/login` verifies the password with ASP.NET Core
 Identity's `PasswordHasher` and returns a signed JWT (7 days by default). The
 extension keeps it in `chrome.storage.local`, shared by the popup, dashboard and
-service worker; the web dashboard keeps it in `localStorage`. SignalR sends it in
-the query string, which the API accepts on the hub path only. Accounts are
+service worker; the web dashboard keeps it in `localStorage`. Socket.IO sends it
+in the handshake `auth` payload. Accounts are
 created by self-service sign-up (`POST /auth/register`: name, e-mail, password),
 which also returns a token, so the client is signed in at once. Sign-up only
 ever creates an ordinary user.
@@ -578,7 +578,7 @@ Node developers already know:
 
 | Concern | Package | Replaces |
 |---|---|---|
-| Realtime push | Socket.IO (`socket.io`, `socket.io-client`) | SignalR (#27). A hand-written SignalR protocol server would have been code nobody else maintains. |
+| Realtime push | Socket.IO (`socket.io`, `socket.io-client`) | The hand-written realtime hub of the original design (#27). A custom protocol server would have been code nobody else maintains. |
 | Input validation, env config | zod | FluentValidation and hand-written field readers |
 | Database access, migrations | Drizzle ORM, drizzle-kit | EF Core |
 | Security headers | helmet | a hand-written middleware |

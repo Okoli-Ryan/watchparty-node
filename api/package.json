@@ -1,7 +1,7 @@
 {
   "name": "@watchparty/api",
   "version": "0.1.0",
-  "description": "The WatchParty API: Express, Postgres, and a SignalR-compatible realtime hub.",
+  "description": "The WatchParty API: Express, Postgres, and a Socket.IO realtime channel.",
   "license": "MIT",
   "private": true,
   "type": "module",

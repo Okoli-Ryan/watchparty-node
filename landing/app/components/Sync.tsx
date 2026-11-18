@@ -7,7 +7,7 @@ export default function Sync() {
       <div className="wrap">
         <h2 id="sync-h" className="mo-la__type">Everyone in step</h2>
         <p className="mo-la__sub">
-          The host&rsquo;s play, pause and seek reach every viewer over SignalR, and a 3-second heartbeat pulls back
+          The host&rsquo;s play, pause and seek reach every viewer over Socket.IO, and a 3-second heartbeat pulls back
           any player that drifts.
         </p>
         <ol className="grid sync-steps">
