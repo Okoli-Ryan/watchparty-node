@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-firefox/
+*.zip
+landing/.next/
+landing/out/
+
+# Local environment: never commit secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Store submission material, kept local (see ui/PRIVACY.md)
+STORE_LISTING.md
+PRIVACY.md
