@@ -59,8 +59,19 @@ const GECKO_ID_DEFAULT = 'watchparty-sync@example.com';
 manifest.browser_specific_settings = {
   gecko: {
     id: process.env.WP_GECKO_ID || GECKO_ID_DEFAULT,
-    // MV3 background modules require a reasonably recent Firefox.
-    strict_min_version: '121.0',
+    // 140 is the first Firefox that shows the data-collection consent prompt
+    // below; older versions would install without asking.
+    strict_min_version: '140.0',
+    // AMO rejects new add-ons that don't declare what they send off the device.
+    // Keep in step with PRIVACY.md and the Chrome data-usage answers.
+    data_collection_permissions: {
+      required: [
+        'personallyIdentifyingInfo', // e-mail address and display name
+        'authenticationInfo', // password at sign-in, then an access token
+        'personalCommunications', // room chat (sent encrypted)
+        'browsingActivity', // the page URL of a room the user creates
+      ],
+    },
   },
 };
 

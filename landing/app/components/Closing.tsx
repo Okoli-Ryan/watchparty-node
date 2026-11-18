@@ -44,6 +44,8 @@ export default function Closing() {
           <div className="footer__legal">
             <span>&copy; 2026 WatchParty Sync</span>
             <a href={`${REPO}/blob/main/LICENSE`}>MIT licence</a>
+            <a href="/privacy">Privacy policy</a>
+            <a href="/terms">Terms of Service</a>
             <div className="socials" />
             <a className="credits" href="/credits.html">Photographs via Wikimedia Commons</a>
           </div>
